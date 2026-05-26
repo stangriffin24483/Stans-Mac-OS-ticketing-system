@@ -10,8 +10,18 @@ function createWindow() {
     }
   })
 
-  const url = process.env.VITE_DEV_SERVER_URL || `file://${path.join(__dirname, '..', 'dist', 'index.html')}`
-  win.loadURL(url)
+  // In development, connect to Vite dev server
+  let url = 'http://localhost:5173'
+  
+  // If the dev server isn't available, try common alternative ports
+  if (!process.env.VITE_DEV_SERVER_URL) {
+    // Development: connect to localhost
+    win.loadURL(url)
+    win.webContents.openDevTools()
+  } else {
+    url = process.env.VITE_DEV_SERVER_URL
+    win.loadURL(url)
+  }
 }
 
 app.whenReady().then(() => {
